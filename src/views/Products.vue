@@ -1,15 +1,27 @@
 <template>
-  <div class="home container">
+  <div class="products container">
     <loading :active.sync="isLoading"></loading>
-    <h2>產品列表的啦</h2>
-    <div v-for="item in products" :key="item.id" style="display: inline-block;">
-      <div class="card" style="width: 18rem;">
-        <img class="card-img-top" :src="item.imageUrl[0]" alt="Card image cap">
-        <div class="card-body">
-          <h5 class="card-title">{{item.title}}</h5>
-          <p class="card-text">{{item.content}}</p>
-          <router-link :to="`/product/${item.id}`">商品介紹</router-link>
-          <!-- <button class="btn btn-primary">詳細介紹</button> -->
+    <!-- <h2>商品列表</h2> -->
+    <div class="row">
+      <div class="col-md-3">
+        <div class="list-group" style="margin: 10px 0px;">
+          <a href="#" class="list-group-item list-group-item-action category">招牌雪球</a>
+          <a href="#" class="list-group-item list-group-item-action category">磅蛋糕</a>
+          <a href="#" class="list-group-item list-group-item-action category">花生醬餅乾</a>
+          <a href="#" class="list-group-item list-group-item-action category">節日禮盒</a>
+          <!-- <a href="#" class="list-group-item list-group-item-action disabled"
+          tabindex="-1" aria-disabled="true">Vestibulum at eros</a> -->
+        </div>
+      </div>
+      <div class="col-md-9 showProducts">
+        <div class="card cardClass" v-for="item in products" :key="item.id" >
+          <img class="card-img-top" :src="item.imageUrl[0]" alt="">
+          <div class="card-body">
+            <h5 class="card-title">{{item.title}}</h5>
+            <p class="card-text">{{item.content}}</p>
+            <router-link :to="`/product/${item.id}`">商品介紹</router-link>
+            <!-- <button class="btn btn-primary">詳細介紹</button> -->
+          </div>
         </div>
       </div>
     </div>
@@ -52,3 +64,43 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+  .products {
+    margin: auto;
+    padding-bottom: 100px;
+  }
+
+  .showProducts {
+    /* width: 50%; */
+    display: flex;
+    justify-content: center;
+  }
+
+  .cardClass {
+    width: 18rem;
+    margin: 10px;
+    background-color: #302D2F;
+    border: .1px solid #F0760F;
+  }
+
+  img {
+    width: 100%;
+    height: auto;
+    max-height: 200px;
+    overflow: hidden;
+  }
+
+  .category {
+    background-color: #302D2F;
+    color: white;
+    border: .1px solid #F0760F;
+    font-weight: 500;
+    transition: all 0.5s;
+  }
+
+  .category:hover {
+    background-color: #F0760F;
+    color: white;
+  }
+</style>

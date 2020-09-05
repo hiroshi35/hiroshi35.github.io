@@ -170,11 +170,12 @@ export default {
 }
 
 .hotItem img{
-  border-radius: 60%;
+  border-radius: 10px;
   border: 1px solid #F0760F;
 }
 
 .hotItem p{
+  color: #FFF !important;
   overflow: hidden;
   height: 100px;
 }
