@@ -147,6 +147,8 @@ export default {
   width: 65%;
   height: auto;
   margin: auto;
+  transform: translateX(0);
+  transition-delay: 1s;
   /* overflow: hidden; */
 }
 

@@ -21,14 +21,14 @@
           <i class="fas fa-list-alt"></i>&emsp;
           <router-link to="/products">商品列表</router-link>
         </div>
-        <div class="linkIcon">
+        <!-- <div class="linkIcon">
           <i class="fas fa-shopping-cart"></i>&emsp;
           <router-link to="/cart">購物車</router-link>
-        </div>
-        <!-- <div class="linkIcon">
-          <i class="fas fa-users-cog"></i>&emsp;
-          <router-link to="/admin/products">Admin</router-link>
         </div> -->
+        <div class="linkIcon">
+          <i class="fas fa-users-cog"></i>&emsp;
+          <router-link to="/admin/products">登入會員</router-link>
+        </div>
       </div>
     </div>
     <router-view/>
@@ -94,6 +94,10 @@ i {
   display: flex;
   flex-direction: column;
   margin:auto;
+}
+
+.linkIcon a {
+  text-decoration: none;
 }
 
 img {
