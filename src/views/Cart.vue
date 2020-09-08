@@ -1,6 +1,7 @@
 <template>
   <div class="cart container">
     <!-- <h3>購物車</h3> -->
+    <loading :active.sync="isLoading"></loading>
     <div class="orderProgress">
       <step-progress :steps="mySteps" :current-step="currentStep"
       icon-class="fa fa-check" active-color="#F0760F" passive-color="#F0760F"
@@ -65,8 +66,8 @@
               <th scope="col">刪除</th>
             </tr>
           </thead>
-          <tbody v-if="shoppingList.length" style="color: white;">
-            <tr v-for="item in shoppingList" :key="item.id">
+          <tbody v-if="cart.length" style="color: white;">
+            <tr v-for="item in cart" :key="item.id">
               <td>{{item.product.title}}</td>
               <td>{{item.product.price}}</td>
               <td>{{item.quantity}}</td>
@@ -81,10 +82,18 @@
         </table>
       </div>
     </div>
-    <div>
+    <div class="btGroup">
       <button type="submit" class="btn btn-warning btnSubmit" :disabled="invalid">
         <i class="fas fa-cash-register"></i> 結帳
       </button>
+      <button type="submit" class="btn btn-warning btnSubmit" :disabled="invalid">
+        <router-link to="/products"><i class="fas fa-cash-register"></i> 繼續購物</router-link>
+      </button>
+      <!-- <router-link to="/products">
+        <button type="submit" class="btn btn-warning btnSubmit" :disabled="invalid">
+          <i class="fas fa-cash-register"></i> 繼續購物
+        </button>
+      </router-link> -->
     </div>
   </div>
 </template>
@@ -109,6 +118,7 @@ export default {
   },
   data() {
     return {
+      isLoading: false,
       form: {
         name: '',
         email: '',
@@ -126,7 +136,8 @@ export default {
       passive_thick: 3,
       line_thick: 3,
       invalid: false,
-      shoppingList: [
+      pages: '',
+      cart: [
         {
           product: {
             title: '鹹蛋黃雪球',
@@ -134,20 +145,42 @@ export default {
           },
           quantity: 10,
         },
-        {
-          product: {
-            title: '蛋黃酥',
-            price: 250,
-          },
-          quantity: 5,
-        },
       ],
     };
   },
   methods: {
-    delFromCart() {
-      console.log('0.0');
+    getshoppingList(page) {
+      // const page = 1;
+      // console.log(`page = ${page}`);
+      this.isLoading = true;
+      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_UUID}/ec/shopping?page=${page}`;
+      this.$http.get(api).then((rsp) => {
+        this.isLoading = false;
+        this.cart = rsp.data.data;
+        this.pages = rsp.data.meta.pagination;
+        console.log(`shoppingList: ${JSON.stringify(this.cart)}`);
+        console.log(`pages: ${JSON.stringify(this.pages)}`);
+        // this.pagination = response.data.meta.pagination;
+      }).catch((err) => {
+        this.isLoading = false;
+        console.log(err);
+      });
     },
+    delFromCart(id) {
+      this.isLoading = true;
+      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_UUID}/ec/shopping/${id}`;
+      this.$http.delete(api).then((rsp) => {
+        console.log(rsp);
+        this.getshoppingList(1);
+        this.isLoading = false;
+      }).catch((err) => {
+        console.log(err);
+        this.isLoading = false;
+      });
+    },
+  },
+  mounted() {
+    this.getshoppingList();
   },
 };
 </script>
@@ -186,6 +219,23 @@ export default {
   }
 
   .btnSubmit:hover {
+    background-color: #FFF;
+    color: #F0760F;
+  }
+
+  .btGroup {
+    display: flex;
+    justify-content: center;
+  }
+
+  .btGroup a {
+    /* display: block; */
+    color: black;
+    text-decoration: none;
+  }
+
+  .btGroup button:last-child:hover a {
+    /* display: block; */
     background-color: #FFF;
     color: #F0760F;
   }

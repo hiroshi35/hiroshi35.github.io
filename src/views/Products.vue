@@ -6,7 +6,7 @@
         <i class="fas fa-shopping-cart"></i>
         <label for="">購物車</label>
       </router-link>
-      <div class="badge badge-pill badge-danger badgePos">0</div>
+      <div class="badge badge-pill badge-danger badgePos">{{cartNum}}</div>
     </div>
     <!-- <h2>商品列表</h2> -->
     <div class="row">
@@ -48,6 +48,7 @@ export default {
   name: 'Products',
   data() {
     return {
+      cartNum: 0,
       isLoading: false,
       products: [
         {
@@ -66,7 +67,22 @@ export default {
     };
   },
   props: {},
-  methods: {},
+  methods: {
+    getshoppingList(page) {
+      // const page = 1;
+      // console.log(`page = ${page}`);
+      this.isLoading = true;
+      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_UUID}/ec/shopping?page=${page}`;
+      this.$http.get(api).then((rsp) => {
+        this.isLoading = false;
+        const cart = rsp.data.data;
+        this.cartNum = cart.length;
+      }).catch(() => {
+        this.isLoading = false;
+        // console.log(err);
+      });
+    },
+  },
   created() {
     this.isLoading = true;
     const url = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_UUID}/ec/products`;
@@ -74,7 +90,8 @@ export default {
       .then((res) => {
         // console.log(res);
         this.products = res.data.data;
-        this.isLoading = false;
+        // this.isLoading = false;
+        this.getshoppingList();
       });
   },
 };

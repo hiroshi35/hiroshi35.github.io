@@ -13,26 +13,24 @@
         <div id="carouselExampleControls" class="carousel slide foodShow" data-ride="carousel">
           <div class="carousel-inner">
             <div class="carousel-item active">
-              <img src="../assets/gift1.jpg" class="d-block w-100" alt="">
+              <img :src="product.imageUrl[0]" class="d-block w-100" alt="">
               <div class="carousel-caption d-none d-md-block">
-                <h2>中秋禮盒</h2>
+                <h2>{{product.title}}</h2>
                 <!-- <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p> -->
               </div>
             </div>
-            <div class="carousel-item">
+            <!-- <div class="carousel-item">
               <img src="../assets/gift2.jpg" class="d-block w-100" alt="">
               <div class="carousel-caption d-none d-md-block">
                 <h4>中秋禮盒</h4>
-                <!-- <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p> -->
               </div>
             </div>
             <div class="carousel-item">
               <img src="../assets/gift3.jpg" class="d-block w-100" alt="">
               <div class="carousel-caption d-none d-md-block">
                 <h4>中秋禮盒</h4>
-                <!-- <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p> -->
               </div>
-            </div>
+            </div> -->
           </div>
           <a class="carousel-control-prev" href="#carouselExampleControls" role="button"
           data-slide="prev">
@@ -54,6 +52,17 @@
           <h3>特價NT${{product.price}}</h3>
           <h5><del>原價NT${{product.origin_price}}</del></h5>
         </div>
+        <div class="pushToCart">
+          <div class="btn-group mr-2" role="group" aria-label="Second group">
+            <button type="button" class="btn btn-secondary" @click="setOrderNumber('-')">-</button>
+            <input type="text" v-model="orderNum">
+            <button type="button" class="btn btn-secondary" @click="setOrderNumber('+')">+</button>
+          </div>
+          <div>
+            <label class="cartLabel">總價NT${{product.origin_price*orderNum}}</label>
+            <button class="btn" @click="addToCart"><i class="fas fa-shopping-cart"></i> 購買</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -64,6 +73,7 @@ export default {
   name: 'Product',
   data() {
     return {
+      orderNum: 1,
       isLoading: false,
       cartNum: 0,
       product: {},
@@ -82,13 +92,22 @@ export default {
     this.getshoppingList();
   },
   methods: {
+    setOrderNumber(action) {
+      if (action === '-') {
+        if (this.orderNum > 1) {
+          this.orderNum -= 1;
+        }
+      } else {
+        this.orderNum += 1;
+      }
+    },
     getshoppingList(page) {
       // const page = 1;
       // console.log(`page = ${page}`);
       this.isLoading = true;
       const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_UUID}/ec/shopping?page=${page}`;
       this.$http.get(api).then((rsp) => {
-        // this.isLoading = false;
+        this.isLoading = false;
         const cart = rsp.data.data;
         this.cartNum = cart.length;
         // this.pages = rsp.data.meta.pagination;
@@ -96,9 +115,28 @@ export default {
         // console.log(`shoppingList: ${cart.length}`);
         // console.log(`pages: ${JSON.stringify(this.pages)}`);
         // this.pagination = response.data.meta.pagination;
-      }).catch((err) => {
+      }).catch(() => {
+        this.isLoading = false;
+        // console.log(err);
+      });
+    },
+    addToCart() {
+      this.isLoading = true;
+      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_UUID}/ec/shopping`;
+      const param = {};
+      param.product = this.product.id;
+      param.quantity = this.orderNum;
+      // console.log(JSON.stringify(param));
+      this.$http.post(api, param).then(() => {
+        // console.log(rsp);
         // this.isLoading = false;
-        console.log(err);
+        this.getshoppingList();
+      }).catch(() => {
+        // if (err.name === 'TypeError') {
+        //   alert('check the value input!!');
+        // }
+        // console.log(err.name);
+        this.isLoading = false;
       });
     },
   },
@@ -115,7 +153,7 @@ export default {
     padding-top: 10px;
     position: fixed;
     right: 30px;
-    top: 50%;
+    top: 5%;
     height: 70px;
     width: 70px;
     border: 2px solid #ced4da;
@@ -168,5 +206,52 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
+  }
+
+  .pushToCart {
+    padding: 120px 5px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .pushToCart .btn-group .btn:first-child{
+    border-radius: 100px 0 0 100px;
+    background-color: #F0760F;
+    font-size: 20px;
+    font-weight: 800;
+    width: 40px;
+    border-color: #F0760F;
+  }
+
+  .pushToCart .btn-group input {
+    border-color: none;
+    text-align: center;
+    background-color: #302D2F;
+    border: 2px solid #F0760F;
+    color: white;
+    font-weight: 800;
+    font-size: 20px;
+    width: 80px;
+  }
+
+  .pushToCart .btn-group .btn:last-child{
+    border-radius: 0 100px 100px 0;
+    width: 40px;
+    background-color: #F0760F;
+    font-weight: 800;
+    font-size: 20px;
+    border-color: #F0760F;
+  }
+
+  .pushToCart .btn {
+    background-color: #F0760F;
+    color: white;
+  }
+
+  .cartLabel {
+    display: inline-block;
+    margin: 0px 15px;
+    font-weight: bold;
+    font-size: 20px;
   }
 </style>
