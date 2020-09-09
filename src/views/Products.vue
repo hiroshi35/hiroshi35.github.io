@@ -34,8 +34,12 @@
               {{item.title}}   <span class="badge badge-pill badge-warning">
               {{item.category}}</span></h5>
             <p class="card-text">{{item.content}}</p>
-            <router-link :to="`/product/${item.id}`" style="color: #FFF;">商品介紹</router-link>
+            <!-- <router-link :to="`/product/${item.id}`" style="color: #FFF;">
+            商品介紹</router-link> -->
             <!-- <button class="btn btn-primary">詳細介紹</button> -->
+          </div>
+          <div class="hoverLink">
+            <router-link :to="`/product/${item.id}`" style="color: #FFF;">商品介紹</router-link>
           </div>
         </div>
       </div>
@@ -160,6 +164,34 @@ export default {
     background-color: #302D2F;
     border: .1px solid #F0760F;
     overflow: hidden;
+    position: relative;
+  }
+
+  .cardClass .hoverLink {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    vertical-align: middle;
+    box-sizing: border-box;
+    padding-top: 100px;
+    font-size: 30px;
+    font-weight: 800;
+    text-decoration: #FFF;
+    background-color: rgba(0, 0, 0, .5);
+    display: inline-block;
+    opacity: 0;
+    transform: scale(0);
+    transition: .3s;
+  }
+
+  .cardClass:hover .hoverLink {
+    transform: scale(1);
+    opacity: 1;
+    /* display: inline-block; */
+    /* display: flex; */
   }
 
   .card-body p {

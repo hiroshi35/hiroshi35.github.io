@@ -13,7 +13,8 @@
         <div id="carouselExampleControls" class="carousel slide foodShow" data-ride="carousel">
           <div class="carousel-inner">
             <div class="carousel-item active">
-              <img :src="product.imageUrl[0]" class="d-block w-100" alt="">
+              <img v-if="product.imageUrl !== undefined" :src="image"
+              class="d-block w-100" alt="">
               <div class="carousel-caption d-none d-md-block">
                 <h2>{{product.title}}</h2>
                 <!-- <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p> -->
@@ -74,7 +75,7 @@ export default {
   data() {
     return {
       orderNum: 1,
-      isLoading: false,
+      isLoading: true,
       cartNum: 0,
       product: {},
     };
@@ -138,6 +139,11 @@ export default {
         // console.log(err.name);
         this.isLoading = false;
       });
+    },
+  },
+  computed: {
+    image() {
+      return this.product.imageUrl[0];
     },
   },
 };
