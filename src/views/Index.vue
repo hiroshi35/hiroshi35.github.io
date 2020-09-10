@@ -66,7 +66,7 @@ export default {
 #nav {
   width: 80%;
   margin: auto;
-  padding: 20px !important;
+  padding: 20px 50px !important;
 }
 
 #nav a {
