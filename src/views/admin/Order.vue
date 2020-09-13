@@ -1,5 +1,7 @@
 <template>
   <div class="order">
-    <h1>這是後台訂單頁面平台的啦！</h1>
+    <h2>半吊子廚房訂單管理頁面</h2>
+    <table class="table mt-3">
+    </table>
   </div>
 </template>

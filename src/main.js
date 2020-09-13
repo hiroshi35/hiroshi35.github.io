@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import jquery from 'jquery';
 import axios from 'axios';
 import VueAxios from 'vue-axios';
 import Loading from 'vue-loading-overlay';
@@ -14,6 +15,7 @@ import router from './router';
 library.add(faUserSecret);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.config.productionTip = false;
+window.$ = jquery;
 
 Vue.use(VueAxios, axios);
 Vue.component('Loading', Loading);
