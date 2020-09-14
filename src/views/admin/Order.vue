@@ -14,8 +14,20 @@
         </tr>
       </thead>
       <tbody>
-        
       </tbody>
     </table>
   </div>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+    };
+  },
+};
+</script>
+
+<style scoped>
+
+</style>
